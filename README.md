@@ -1,13 +1,5 @@
 # BioInfo575_group_project: Phylogenetic methods used in Bioinfo 575 final project Spring 2015
 
-##Bayesian Inference
-Komal type here:
-###instruction
-#### do another thing
-##### code comments
-	your code here something
-
-
 ##Core Genome
 ###### download parsnp and gingr
 	curl -O https://github.com/marbl/harvest-tools/releases/download/v1.2/harvesttools-Linux64-v1.2.tar.gz/
@@ -180,3 +172,35 @@ Komal type here:
 	#correlation statistic between matrices
 	cor.test(kSNP_core_mat,parsnp_mat)
 	cor.test(Abau_kSNP_core_mat,Abau_parsnp_mat)
+	
+
+##Bayesian Inference
+
+###### MrBayes accepts nexus aligned sequence files as input. Therefore use Mugsy and Maf2Fasta like we did for the SNP trees to align the sequences. And then follow the next few steps to convert the files.
+###### Download bioscripts.convert 4
+	curl -O https://pypi.python.org/packages/source/b/bioscripts.convert/bioscripts.convert-0.4.tar.gz
+	tar zxvf bioscripts.convert.tgz
+	cd bioscripts.convert-0.4
+	python setup.py install 
+###### To convert the fasta files into nexus files
+	cd bioscripts
+	cd convert 
+	python convbioseq.py nexus <input file>
+###### Download and Install MrBayes (version 3.2.4 x 64)
+	curl -O http://mrbayes.sourceforge.net/download.php
+	# go into the directory where mrbayes is
+	./configure
+	make
+	make install
+###### Now to run Mrbayes run the following commands
+	mb 
+	execute <nexus file location>
+	lset nst=6 rates=invgamma
+	mcmc ngen=20000 samplefreq=100 printfreq=100 diagnfreq=1000
+	while standard deviation > 0.01:
+		yes
+		10000
+	no
+	sump 
+	sumt
+###### The resulting nexus consensus trees can be visualized using Figtree or in R using the ape package
